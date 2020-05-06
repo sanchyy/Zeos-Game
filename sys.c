@@ -17,6 +17,8 @@
 
 #include <errno.h>
 
+#include <buffer.h>
+
 #define LECTURA 0
 #define ESCRIPTURA 1
 
@@ -235,4 +237,8 @@ int sys_get_stats(int pid, struct stats *st)
     }
   }
   return -ESRCH; /*ESRCH */
+}
+
+int sys_get_key(char *c) {
+  return read_buffer(c);
 }
