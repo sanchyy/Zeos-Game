@@ -1,8 +1,5 @@
 #include <buffer.h>
 
-char c_buff[BS];
-
-
 int read_buffer(char *c) {
     if (r_p == w_p)  // No queden variables per llegir
         return 0;

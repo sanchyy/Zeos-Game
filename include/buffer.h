@@ -1,12 +1,13 @@
-#ifndef BUFFER_HH
-#define BUFFER_HH
+#ifndef BUFFER_H
+#define BUFFER_H
 
 #define BS 256
 
+char c_buff[BS];
 int r_p = 0; // read pointer
 int w_p = 0; // write pointer
 
-char read_buffer(char *c);
-void write_buffer(char c);
+int read_buffer(char *c);
+int write_buffer(char c);
 
-#endif
+#endif  /* BUFFER_H */
