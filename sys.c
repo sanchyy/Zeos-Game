@@ -242,3 +242,12 @@ int sys_get_stats(int pid, struct stats *st)
 int sys_get_key(char *c) {
   return read_buffer(c);
 }
+
+int sys_put_screen(char *s)
+{
+	int i, j;
+	for(i = 0; i <= 25; i++){
+		for (j = 0; j <= 80; j++)
+		printc_xy(i, j, *(&s + i*j));
+		}
+}
