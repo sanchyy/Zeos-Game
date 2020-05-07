@@ -6,14 +6,11 @@ int w_p = 0; // write pointer
 
 int read_buffer(char *c) {
     if (r_p == w_p)  // No queden variables per llegir
-        return 0;
+       return 0;
     *c = c_buff[r_p++ % BS];
     return 1;
 }
 
-int write_buffer(char c) {
-    if (w_p == r_p) // hem omplert el buffer
-        return 0;
+void write_buffer(char c) {
     c_buff[w_p++ % BS] = c;
-    return 1;
 }
