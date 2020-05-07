@@ -11,7 +11,7 @@
 
 #include <zeos_interrupt.h>
 
-#include<buffer.h>
+#include <buffer.h>
 
 Gate idt[IDT_ENTRIES];
 Register    idtR;
