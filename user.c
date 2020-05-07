@@ -1,22 +1,42 @@
 #include <libc.h>
 
-char buff[24];
-
-int pid;
-
-unsigned char c;
-unsigned char *c_pointer = &c;
+char pantalla[25][80];
+char *p_pantalla = &pantalla[0][0];
+char c;
+char *c_pointer = &c;
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-    /* Next line, tries to move value 0 to CR3 register. This register is a privileged one, and so it will raise an exception */
-     /* __asm__ __volatile__ ("mov %0, %%cr3"::"r" (0) ); */
-     
+
+
+/* Omplim pantalla*/
+int i, j;
+	for(i = 0; i < 25; i++){
+		for (j = 0; j < 80; j++){
+			pantalla[i][j] = 'X';
+		}
+	}
+	
+	while(1) {
+		if(get_key(c_pointer)){
+			if (*c_pointer == 'c') put_screen(p_pantalla);
+		}
+	}
+}
+
+/*------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
+char c;
+char *c_pointer = &c;
+
+int __attribute__ ((__section__(".text.main")))
+  main(void)
+{
 
   while(1) {
 	  if(get_key(c_pointer)){
-		if (*c_pointer == 'c') write(1, "c", 1);
+		if (*c_pointer == 'c') write(1, "OK!", 3);
 	}
 	   }
 }
+--------------------------------------------------------------*/

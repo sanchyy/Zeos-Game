@@ -246,8 +246,8 @@ int sys_get_key(char *c) {
 int sys_put_screen(char *s)
 {
 	int i, j;
-	for(i = 0; i <= 25; i++){
-		for (j = 0; j <= 80; j++){
+	for(i = 0; i < 25; i++){
+		for (j = 0; j < 80; j++){
 			char result = *(s+i*j);
 			printc_xy(i, j, result);
 		}
