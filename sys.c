@@ -247,7 +247,10 @@ int sys_put_screen(char *s)
 {
 	int i, j;
 	for(i = 0; i <= 25; i++){
-		for (j = 0; j <= 80; j++)
-		printc_xy(i, j, *(&s + i*j));
+		for (j = 0; j <= 80; j++){
+			char result = *(s+i*j);
+			printc_xy(i, j, result);
 		}
+	}
+	return 1;
 }
