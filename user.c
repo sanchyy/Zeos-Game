@@ -5,6 +5,7 @@ char buff[24];
 int pid;
 
 unsigned char c;
+unsigned char *c_pointer = &c;
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
@@ -14,10 +15,8 @@ int __attribute__ ((__section__(".text.main")))
      
 
   while(1) {
-	  if(get_key(&c)){
-		  itoa(c, buff);
-			write(1, buff, 4);
-//		if (*c == "c") write(1, "\nOK!", 3);
+	  if(get_key(c_pointer)){
+		if (*c_pointer == 'c') write(1, "c", 1);
 	}
 	   }
 }

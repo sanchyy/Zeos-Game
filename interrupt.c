@@ -47,7 +47,7 @@ void keyboard_routine()
 {
   unsigned char c = inb(0x60);
   
-  write_buffer(c); //escrivim al buffer circular
+  write_buffer(char_map[c&0x7f]); //escrivim al buffer circular
   
   if (c&0x80) printc_xy(0, 0, char_map[c&0x7f]);
 }
