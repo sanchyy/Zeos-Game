@@ -114,7 +114,7 @@ ENTRY(get_key)
     ret
     
     
-ENTRY(get_put_screen)
+ENTRY(put_screen)
     pushl %ebp
     movl %esp, %ebp
     pushl %ebx;
