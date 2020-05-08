@@ -254,3 +254,7 @@ int sys_put_screen(char *s)
 	}
 	return 1;
 }
+
+void sys_sbrk(double increment) {
+
+}

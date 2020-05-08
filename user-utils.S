@@ -100,6 +100,8 @@ ENTRY(get_stats)
 	popl %ebp
 	ret
 	
+
+/* int get_key(char *c) */
 ENTRY(get_key)
     pushl %ebp
     movl %esp, %ebp
@@ -113,7 +115,7 @@ ENTRY(get_key)
     popl %ebp
     ret
     
-    
+/* void put_screen(char *s)*/
 ENTRY(get_put_screen)
     pushl %ebp
     movl %esp, %ebp
@@ -127,3 +129,17 @@ ENTRY(get_put_screen)
     popl %ebp
     ret
 
+
+/* void sbrk(double increment) */
+ENTRY(sbrk)
+    pushl %ebp
+    movl %esp, %ebp
+    pushl %ebx;
+    movl $0x06, %eax # codi 6
+    movl 0x8(%ebp), %ebx;
+    call syscall_sysenter
+	popl %ebx
+	test %eax, %eax
+	js nok
+    popl %ebp
+    ret

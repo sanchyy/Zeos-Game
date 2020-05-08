@@ -33,6 +33,8 @@ int get_key(char *c);
 
 int put_screen(char *s);
 
+int sbrk(double increment);
+
 
 
 #endif  /* __LIBC_H__ */
