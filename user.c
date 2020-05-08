@@ -7,38 +7,85 @@ char *c_pointer = &c;
 
 
 //posicio inicial de la nau
-pos_x_nau = 40;
-pos_y_nau = 20;
+int pos_x_nau = 40;
+int pos_y_nau = 20;
+
+char puntuacio[3];
+int puntuacio_r = 0;
+
+int fruita_menjada = 0;
+
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-	omplir_pantalla(pos_x_nau,pos_y_nau);
+	pintar_pantalla(pos_x_nau,pos_y_nau);
 	put_screen(p_pantalla);
+	puntuacio[0] = '0';
+
 	while(1) {
 		if(get_key(c_pointer)){
 			if (*c_pointer == 'a') {
-				omplir_pantalla(--pos_x_nau, pos_y_nau);
-				put_screen(p_pantalla);
+				if(pos_x_nau != 0 && *(p_pantalla+pos_y_nau*80 + pos_x_nau -1) != 'X'){
+					if(*(p_pantalla+pos_y_nau*80 + pos_x_nau -1) == '.') {
+						++puntuacio_r;
+						itoa(puntuacio_r, puntuacio);
+						fruita_menjada = 1;
+					}
+					pintar_pantalla(--pos_x_nau, pos_y_nau);
+					put_screen(p_pantalla);
+				}
 			}
 			if (*c_pointer == 'd'){
-				omplir_pantalla(++pos_x_nau, pos_y_nau);
-				put_screen(p_pantalla);
+				if(pos_x_nau != 79 && *(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) != 'X'){
+					if(*(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) == '.') {
+						++puntuacio_r;
+						itoa(puntuacio_r, puntuacio);
+					}
+					pintar_pantalla(++pos_x_nau, pos_y_nau);
+					put_screen(p_pantalla);
+				}
+			}
+			if (*c_pointer == 'w'){
+				if(pos_y_nau != 0 && *(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) != 'X'){
+					if(*(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) == '.') {
+						++puntuacio_r;
+						itoa(puntuacio_r, puntuacio);
+					}
+					pintar_pantalla(pos_x_nau, --pos_y_nau);
+					put_screen(p_pantalla);
+				}
+			}
+			if (*c_pointer == 's'){
+				if(pos_y_nau != 24 && *(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) != 'X'){
+					if(*(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) == '.') {
+						++puntuacio_r;
+						itoa(puntuacio_r, puntuacio);
+					}
+					pintar_pantalla(pos_x_nau, ++pos_y_nau);
+					put_screen(p_pantalla);
+				}
 			}
 		}
 	}
 }
 
-void omplir_pantalla(int x, int y){
+
+void pintar_pantalla(int x, int y){
 	int i, j;
-	for (j = 0; j < 80; j++){
-		for(i = 0; i < 25; i++){
-			if(i == y && j == x) pantalla[i][j] = 'O';
+	for(i = 0; i < 25; i++){
+		for (j = 0; j < 80; j++){
+			if(i == 20 && j == 60)pantalla[i][j] = 'X';
+			else if (i == 20 && j == 10 && !fruita_menjada) pantalla[i][j] = '.';
+			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76];
+			else if(i == y && j == x) pantalla[i][j] = 'O';
 			else pantalla[i][j] = ' ';
 		}
 	}
 	
 }
+
+
 
 
 /* //------------- JUEGO DE PRUEBAS NAVE put_screen(char *s) + get_key(char *c) ------------
@@ -86,7 +133,6 @@ void omplir_pantalla(int x, int y){
 
 
 
-
 /* //------------- JUEGO DE PRUEBAS put_screen(char *s) ------------
  char pantalla[80][25];
 char *p_pantalla = &pantalla[0][0];
@@ -114,6 +160,7 @@ int i, j;
 	}
 }
 //---------------------------------------------------------------*/
+
 
 
 /* //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
