@@ -246,10 +246,11 @@ int sys_get_key(char *c) {
 int sys_put_screen(char *s)
 {
 	int i, j;
+	char result;
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
-			char result = *(s+i*j);
-			printc_xy(i, j, result);
+			result = *(s+i*80+j);
+			printc_xy(j, i, result);
 		}
 	}
 	return 1;

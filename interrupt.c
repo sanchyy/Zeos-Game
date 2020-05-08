@@ -37,7 +37,7 @@ int zeos_ticks = 0;
 
 void clock_routine()
 {
-  zeos_show_clock();
+  //zeos_show_clock();
   zeos_ticks ++;
   
   schedule();
@@ -46,10 +46,10 @@ void clock_routine()
 void keyboard_routine()
 {
   unsigned char c = inb(0x60);
+  int is_make = c & 0x80; //0 -> make, 1 -> break
+  if(!is_make) write_buffer(char_map[c&0x7f]); //escrivim al buffer circular
   
-  write_buffer(char_map[c&0x7f]); //escrivim al buffer circular
-  
-  if (c&0x80) printc_xy(0, 0, char_map[c&0x7f]);
+ // if (c&0x80) printc_xy(0, 0, char_map[c&0x7f]);
 }
 
 void setInterruptHandler(int vector, void (*handler)(), int maxAccessibleFromPL)

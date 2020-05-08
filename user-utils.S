@@ -115,8 +115,9 @@ ENTRY(get_key)
     popl %ebp
     ret
     
+	
 /* void put_screen(char *s)*/
-ENTRY(get_put_screen)
+ENTRY(put_screen)
     pushl %ebp
     movl %esp, %ebp
     pushl %ebx;
