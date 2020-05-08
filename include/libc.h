@@ -33,7 +33,7 @@ int get_key(char *c);
 
 int put_screen(char *s);
 
-int sbrk(double increment);
+int *sbrk(int incr);
 
 
 

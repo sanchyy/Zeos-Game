@@ -256,6 +256,6 @@ int sys_put_screen(char *s)
 	return 1;
 }
 
-int sys_sbrk(unsigned int increment) {
+int *sys_sbrk(int incr) {
   
 }
