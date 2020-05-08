@@ -14,7 +14,7 @@ char puntuacio[3];
 int puntuacio_r = 0;
 
 int fruita_menjada = 0;
-
+int posx, posy;
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
@@ -22,6 +22,7 @@ int __attribute__ ((__section__(".text.main")))
 	pintar_pantalla(pos_x_nau,pos_y_nau);
 	put_screen(p_pantalla);
 	puntuacio[0] = '0';
+	//fruita_random(posx, posy);
 
 	while(1) {
 		if(get_key(c_pointer)){
@@ -75,16 +76,27 @@ void pintar_pantalla(int x, int y){
 	int i, j;
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
-			if(i == 20 && j == 60)pantalla[i][j] = 'X';
-			else if (i == 20 && j == 10 && !fruita_menjada) pantalla[i][j] = '.';
-			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76];
-			else if(i == y && j == x) pantalla[i][j] = 'O';
-			else pantalla[i][j] = ' ';
+			if((i % 13 == 4 || i % 13 == 5 || i % 13 == 6 || i % 13 == 7) && ( j % 15 == 5 || j % 15 == 6 || j % 15 == 7))pantalla[i][j] = 'X'; //parets fetes amb moduls
+			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76]; //marcador de puntuacio
+			else if(i == y && j == x) pantalla[i][j] = 'O'; //posicio de la nau
+			else pantalla[i][j] = ' '; //pantalla normal per defecte
+		/*	
+			if (i == posy && j == posx && !fruita_menjada) pantalla[i][j] = '.'; //fer aixo
+			else {
+				fruita_random(posx, posy);
+				fruita_menjada = 0;
+				if (i == posy && j == posx && !fruita_menjada) pantalla[i][j] = '.'; //fer aixo
+				*/
+			
 		}
 	}
-	
 }
 
+/*void fruita_random(int posx, int posy){
+	posx = zeos_ticks % 79;
+	posy = zeos_ticks % 24;
+	}
+*/
 
 
 
