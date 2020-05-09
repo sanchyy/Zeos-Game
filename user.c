@@ -5,7 +5,6 @@ char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
 
-
 //posicio inicial de la nau
 int pos_x_nau = 40;
 int pos_y_nau = 20;
@@ -14,7 +13,9 @@ char puntuacio[3];
 int puntuacio_r = 0;
 
 int fruita_menjada = 0;
-int posx, posy;
+int a;
+int y_fruita = 10, x_fruita = 30;
+
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
@@ -22,9 +23,9 @@ int __attribute__ ((__section__(".text.main")))
 	pintar_pantalla(pos_x_nau,pos_y_nau);
 	put_screen(p_pantalla);
 	puntuacio[0] = '0';
-	//fruita_random(posx, posy);
 
 	while(1) {
+		a = gettime();
 		if(get_key(c_pointer)){
 			if (*c_pointer == 'a') {
 				if(pos_x_nau != 0 && *(p_pantalla+pos_y_nau*80 + pos_x_nau -1) != 'X'){
@@ -42,6 +43,7 @@ int __attribute__ ((__section__(".text.main")))
 					if(*(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) == '.') {
 						++puntuacio_r;
 						itoa(puntuacio_r, puntuacio);
+						fruita_menjada = 1;
 					}
 					pintar_pantalla(++pos_x_nau, pos_y_nau);
 					put_screen(p_pantalla);
@@ -52,6 +54,7 @@ int __attribute__ ((__section__(".text.main")))
 					if(*(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) == '.') {
 						++puntuacio_r;
 						itoa(puntuacio_r, puntuacio);
+						fruita_menjada = 1;
 					}
 					pintar_pantalla(pos_x_nau, --pos_y_nau);
 					put_screen(p_pantalla);
@@ -62,6 +65,7 @@ int __attribute__ ((__section__(".text.main")))
 					if(*(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) == '.') {
 						++puntuacio_r;
 						itoa(puntuacio_r, puntuacio);
+						fruita_menjada = 1;
 					}
 					pintar_pantalla(pos_x_nau, ++pos_y_nau);
 					put_screen(p_pantalla);
@@ -72,6 +76,7 @@ int __attribute__ ((__section__(".text.main")))
 }
 
 
+
 void pintar_pantalla(int x, int y){
 	int i, j;
 	for(i = 0; i < 25; i++){
@@ -80,23 +85,17 @@ void pintar_pantalla(int x, int y){
 			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76]; //marcador de puntuacio
 			else if(i == y && j == x) pantalla[i][j] = 'O'; //posicio de la nau
 			else pantalla[i][j] = ' '; //pantalla normal per defecte
-		/*	
-			if (i == posy && j == posx && !fruita_menjada) pantalla[i][j] = '.'; //fer aixo
-			else {
-				fruita_random(posx, posy);
-				fruita_menjada = 0;
-				if (i == posy && j == posx && !fruita_menjada) pantalla[i][j] = '.'; //fer aixo
-				*/
 			
+			if (!fruita_menjada){ pantalla[y_fruita][x_fruita] = '.'; //fer aixo
+			}else {
+				x_fruita = a % 80;
+				y_fruita = a % 25;
+				pantalla[y_fruita][x_fruita] = '.';
+				fruita_menjada = 0;
+			}
 		}
 	}
 }
-
-/*void fruita_random(int posx, int posy){
-	posx = zeos_ticks % 79;
-	posy = zeos_ticks % 24;
-	}
-*/
 
 
 

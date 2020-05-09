@@ -191,8 +191,8 @@ int sys_gettime()
 
 void sys_exit()
 {  
-  int i;
-
+  int i, j;
+  int pags_extra;
   page_table_entry *process_PT = get_PT(current());
 
   // Deallocate all the propietary physical pages
@@ -201,6 +201,11 @@ void sys_exit()
     free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+i));
     del_ss_pag(process_PT, PAG_LOG_INIT_DATA+i);
   }
+  pags_extra = (*(current()->last_pos) >> 12)-NUM_PAG_KERNEL-NUM_PAG_CODE-NUM_PAG_DATA ;
+  for(j = 0; j < pags_extra; ++i){
+	free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i));
+	del_ss_pag(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i);
+	}
   
   /* Free task_struct */
   list_add_tail(&(current()->list), &freequeue);
