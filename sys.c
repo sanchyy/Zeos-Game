@@ -244,7 +244,8 @@ int sys_get_stats(int pid, struct stats *st)
   return -ESRCH; /*ESRCH */
 }
 
-int sys_get_key(char *c) {
+int sys_get_key(char *c) 
+{
   return read_buffer(c);
 }
 
@@ -262,5 +263,18 @@ int sys_put_screen(char *s)
 }
 
 int *sys_sbrk(int incr) {
-  
+
+  //pas 1: Agafar direcció on començar
+  int *init_pos = current()->last_pos;
+  page_table_entry *process_PT = get_PT(current());
+
+  //pas 2: incrementar memòria i actualitzar punter
+  int *new_pos = (unsigned) init_pos + (unsigned) incr;
+  int pages = (*(current()->last_pos) >> 12) - (*new_pos >> 12);
+  for (int i = 0; i < pages; ++i) {
+    int ph_page = alloc_frame();
+    set_ss_pag(process_PT, (unsigned) (*init_pos >> 12) + i + 1, ph_page );
+  }
+
+  return init_pos;
 }
