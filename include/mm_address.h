@@ -11,6 +11,7 @@
 #define PAG_LOG_INIT_DATA (PAG_LOG_INIT_CODE+NUM_PAG_CODE)
 #define NUM_PAG_DATA 20
 #define PAGE_SIZE 0x1000
+#define FIRST_ASSIGNABLE_POS (256+20+8+20) >> 12
 
 /* Memory distribution */
 /***********************/
