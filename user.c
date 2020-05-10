@@ -1,5 +1,6 @@
 #include <libc.h>
 
+//pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
 char c;
@@ -9,67 +10,78 @@ char *c_pointer = &c;
 int pos_x_nau = 40;
 int pos_y_nau = 20;
 
+//marcador
 char puntuacio[3];
 int puntuacio_r = 0;
 
+//fruites
 int fruita_menjada = 0;
 int a;
 int y_fruita = 10, x_fruita = 30;
+
+//direcions
+int direccio;
 
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
+	direccio = 1;
 	pintar_pantalla(pos_x_nau,pos_y_nau);
 	put_screen(p_pantalla);
 	puntuacio[0] = '0';
-
+	a = 0;
 	while(1) {
 		a = gettime();
 		if(get_key(c_pointer)){
-			if (*c_pointer == 'a') {
-				if(pos_x_nau != 0 && *(p_pantalla+pos_y_nau*80 + pos_x_nau -1) != 'X'){
-					if(*(p_pantalla+pos_y_nau*80 + pos_x_nau -1) == '.') {
-						++puntuacio_r;
-						itoa(puntuacio_r, puntuacio);
-						fruita_menjada = 1;
-					}
-					pintar_pantalla(--pos_x_nau, pos_y_nau);
-					put_screen(p_pantalla);
+			if (*c_pointer == 'a') direccio = 1;
+			if (*c_pointer == 's') direccio = 4;
+			if (*c_pointer == 'd') direccio = 3;
+			if (*c_pointer == 'w') direccio = 2;
+		}
+		
+		if(a %100 == 0 && direccio == 1){ //a
+			if(pos_x_nau != 0 && *(p_pantalla+pos_y_nau*80 + pos_x_nau -1) != 'X'){
+				if(*(p_pantalla+pos_y_nau*80 + pos_x_nau -1) == '*') {
+					++puntuacio_r;
+					itoa(puntuacio_r, puntuacio);
+					fruita_menjada = 1;
 				}
+				pintar_pantalla(--pos_x_nau, pos_y_nau);
+				put_screen(p_pantalla);
+			}		
+		}
+		else if(a %100 == 0 && direccio == 2){ //w
+			if(pos_y_nau != 0 && *(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) != 'X'){
+				if(*(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) == '*') {
+					++puntuacio_r;
+					itoa(puntuacio_r, puntuacio);
+					fruita_menjada = 1;
+				}
+				pintar_pantalla(pos_x_nau, --pos_y_nau);
+				put_screen(p_pantalla);
 			}
-			if (*c_pointer == 'd'){
-				if(pos_x_nau != 79 && *(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) != 'X'){
-					if(*(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) == '.') {
-						++puntuacio_r;
-						itoa(puntuacio_r, puntuacio);
-						fruita_menjada = 1;
-					}
-					pintar_pantalla(++pos_x_nau, pos_y_nau);
-					put_screen(p_pantalla);
+		}
+		else if(a %100 == 0 && direccio == 3){ //d
+			if(pos_x_nau != 79 && *(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) != 'X'){
+				if(*(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) == '*') {
+					++puntuacio_r;
+					itoa(puntuacio_r, puntuacio);
+					fruita_menjada = 1;
 				}
-			}
-			if (*c_pointer == 'w'){
-				if(pos_y_nau != 0 && *(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) != 'X'){
-					if(*(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) == '.') {
-						++puntuacio_r;
-						itoa(puntuacio_r, puntuacio);
-						fruita_menjada = 1;
-					}
-					pintar_pantalla(pos_x_nau, --pos_y_nau);
-					put_screen(p_pantalla);
+				pintar_pantalla(++pos_x_nau, pos_y_nau);
+				put_screen(p_pantalla);
+			}			
+		}
+		else if(a %100 == 0 && direccio == 4){ //s
+			if(pos_y_nau != 24 && *(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) != 'X'){
+				if(*(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) == '*') {
+					++puntuacio_r;
+					itoa(puntuacio_r, puntuacio);
+					fruita_menjada = 1;
 				}
-			}
-			if (*c_pointer == 's'){
-				if(pos_y_nau != 24 && *(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) != 'X'){
-					if(*(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) == '.') {
-						++puntuacio_r;
-						itoa(puntuacio_r, puntuacio);
-						fruita_menjada = 1;
-					}
-					pintar_pantalla(pos_x_nau, ++pos_y_nau);
-					put_screen(p_pantalla);
-				}
+				pintar_pantalla(pos_x_nau, ++pos_y_nau);
+				put_screen(p_pantalla);
 			}
 		}
 	}
@@ -86,11 +98,11 @@ void pintar_pantalla(int x, int y){
 			else if(i == y && j == x) pantalla[i][j] = 'O'; //posicio de la nau
 			else pantalla[i][j] = ' '; //pantalla normal per defecte
 			
-			if (!fruita_menjada){ pantalla[y_fruita][x_fruita] = '.'; //fer aixo
+			if (!fruita_menjada){ pantalla[y_fruita][x_fruita] = '*'; //fer aixo
 			}else {
-				x_fruita = a % 80;
-				y_fruita = a % 25;
-				pantalla[y_fruita][x_fruita] = '.';
+				x_fruita = a % 79;
+				y_fruita = a % 24;
+				pantalla[y_fruita][x_fruita] = '*';
 				fruita_menjada = 0;
 			}
 		}
