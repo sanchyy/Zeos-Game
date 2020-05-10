@@ -201,7 +201,7 @@ void sys_exit()
     free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+i));
     del_ss_pag(process_PT, PAG_LOG_INIT_DATA+i);
   }
-  pags_extra = (*(current()->last_pos) >> 12)-NUM_PAG_KERNEL-NUM_PAG_CODE-NUM_PAG_DATA ;
+  pags_extra = (*(current()->last_pos) >> 12) - FIRST_ASSIGNABLE_POS;
   for(j = 0; j < pags_extra; ++i){
 	free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i));
 	del_ss_pag(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i);
@@ -270,11 +270,11 @@ int *sys_sbrk(int incr) {
 
   //pas 2: incrementar memòria i actualitzar punter
   int *new_pos = (unsigned) init_pos + (unsigned) incr;
-  int pages = (*(current()->last_pos) >> 12) - (*new_pos >> 12);
+  int pages = *(current()->last_pos) >> 12 - (*new_pos >> 12);
   for (int i = 0; i < pages; ++i) {
     int ph_page = alloc_frame();
     set_ss_pag(process_PT, (unsigned) (*init_pos >> 12) + i + 1, ph_page );
   }
-
+  *(current()->last_pos) += incr; // l'ultima posicio alocatada canvia
   return init_pos;
 }

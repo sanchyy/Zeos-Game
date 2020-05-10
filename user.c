@@ -1,5 +1,7 @@
 #include <libc.h>
 
+//-------------------------- JUEGO DE PRUEBAS FRUTA ------------------
+
 //pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
@@ -22,10 +24,13 @@ int y_fruita = 10, x_fruita = 30;
 //direcions
 int direccio;
 
+//sbrk
+int *retorn;
+char buffer[5];
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
-{
+{	
 	direccio = 1;
 	pintar_pantalla(pos_x_nau,pos_y_nau);
 	put_screen(p_pantalla);
@@ -87,8 +92,6 @@ int __attribute__ ((__section__(".text.main")))
 	}
 }
 
-
-
 void pintar_pantalla(int x, int y){
 	int i, j;
 	for(i = 0; i < 25; i++){
@@ -110,9 +113,33 @@ void pintar_pantalla(int x, int y){
 }
 
 
+//-----------------------------------------------------------------------------------------
 
-/* //------------- JUEGO DE PRUEBAS NAVE put_screen(char *s) + get_key(char *c) ------------
- char pantalla[25][80];
+//---------------- JUEGO DE PRUEBAS sbrk(int incr) + exit() -----------------------------
+/*
+int *retorn;
+char buffer[5];
+
+int __attribute__ ((__section__(".text.main")))
+  main(void)
+{
+	retorn = sbrk(25);
+	itoa(*retorn, buffer); //ha de retornar 0x11C
+	write(1, buffer, 5);
+	retorn = sbrk(2000);
+	itoa(*retorn, buffer);
+	write(1, buffer, 5);
+	while(1) {}
+}
+*/
+// -----------------------------------------------------------------------------------------
+
+
+
+//------------- JUEGO DE PRUEBAS NAVE put_screen(char *s) + get_key(char *c) ------------
+
+/*
+char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
@@ -152,12 +179,14 @@ void omplir_pantalla(int x, int y){
 	
 }
  
- *///-------------------------------------------------------
+ */
+ //--------------------------------------------------------------------
 
 
 
-/* //------------- JUEGO DE PRUEBAS put_screen(char *s) ------------
- char pantalla[80][25];
+ //------------- JUEGO DE PRUEBAS put_screen(char *s) ------------
+/* 
+char pantalla[80][25];
 char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
@@ -182,11 +211,14 @@ int i, j;
 		}
 	}
 }
-//---------------------------------------------------------------*/
+*/
+//---------------------------------------------------------------
 
 
 
-/* //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
+ //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
+
+/*
 char c;
 char *c_pointer = &c;
 
@@ -200,4 +232,5 @@ int __attribute__ ((__section__(".text.main")))
 	}
 	   }
 }
-//--------------------------------------------------------------*/
+*/
+//--------------------------------------------------------------

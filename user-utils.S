@@ -136,7 +136,7 @@ ENTRY(sbrk)
     pushl %ebp
     movl %esp, %ebp
     pushl %ebx;
-    movl $0x06, %eax # codi 6
+    movl $0x07, %eax # codi 7
     movl 0x8(%ebp), %ebx;
     call syscall_sysenter
 	popl %ebx
