@@ -266,28 +266,14 @@ int *sys_sbrk(int incr) {
      //pas 1: Agafar direcció on començar
     int *init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
-    if (incr >= 0) {
-        //pas 2: incrementar memòria i actualitzar punter
-        int *new_pos = (unsigned) init_pos + (unsigned) incr;
-        int pages = *(current()->last_pos) >> 12 - (*new_pos >> 12);
-        int init_page = (unsigned) (*init_pos >> 12); 
-        for (int i = 0; i < pages; ++i) {
-            int ph_page = alloc_frame();
-            set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + + i + 1, ph_page );
-        }
+    //pas 2: incrementar memòria i actualitzar punter
+    int *new_pos = (unsigned) init_pos + (unsigned) incr;
+    int pages = *(current()->last_pos) >> 12 - (*new_pos >> 12);
+    int init_page = (unsigned) (*init_pos >> 12); 
+    for (int i = 0; i < pages; ++i) {
+        int ph_page = alloc_frame();
+        set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1, ph_page );
     }
-    else {
-        int *new_pos = (unsigned) init_pos - (unsigned) incr;
-        int pages = (*new_pos >> 12) - *(current()->last_pos) >> 12;
-        int init_page = (unsigned) (*init_post >> 12); 
-        for (int i = 0; i < pages; ++i) { 
-            free_frame(get_frame(process_PT, (FIRST_ASSIGNABLE_POS + init_page +i)));
-	        del_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1);
-  
-        }
-        
-    }
-
   *(current()->last_pos) += incr; // l'ultima posicio alocatada canvia
   return init_pos;
 }
