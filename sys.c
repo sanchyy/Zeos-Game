@@ -263,6 +263,9 @@ int sys_put_screen(char *s)
 }
 
 int *sys_sbrk(int incr) {
+    //sbrk no pot ser negatiu
+    if (incr < 0)
+        return -1;
      //pas 1: Agafar direcció on començar
     int *init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
