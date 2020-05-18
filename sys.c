@@ -246,11 +246,13 @@ int sys_get_stats(int pid, struct stats *st)
 
 int sys_get_key(char *c) 
 {
-  return read_buffer(c);
+	if (!access_ok(VERIFY_READ, c, 1)) return -EFAULT;
+	return read_buffer(c);
 }
 
 int sys_put_screen(char *s)
 {
+	if (!access_ok(VERIFY_READ, s, 1)) return -EFAULT;
 	int i, j;
 	char result;
 	for(i = 0; i < 25; i++){
@@ -263,9 +265,10 @@ int sys_put_screen(char *s)
 }
 
 int *sys_sbrk(int incr) {
-    //sbrk no pot ser negatiu
-    if (incr < 0)
-        return -1;
+    //sbrk no pot ser negatiu en la nostre implementació
+    int bytes_que_quedan = 1024*PAGE_SIZE - *current()->last_pos;
+    if (incr < 0) return -1;
+    if (incr > bytes_que_quedan) return -1;
      //pas 1: Agafar direcció on començar
     int *init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
