@@ -1,7 +1,7 @@
 #include <libc.h>
 
 //-------------------------- JUEGO DE PRUEBAS FRUTA ------------------
-
+/*
 //pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
@@ -112,7 +112,7 @@ void pintar_pantalla(int x, int y){
 	}
 }
 
-
+*/
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS sbrk(int incr) + exit() -----------------------------
@@ -218,7 +218,7 @@ int i, j;
 
  //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
 
-/*
+
 char c;
 char *c_pointer = &c;
 
@@ -232,5 +232,5 @@ int __attribute__ ((__section__(".text.main")))
 	}
 	   }
 }
-*/
+
 //--------------------------------------------------------------

@@ -247,7 +247,7 @@ int sys_get_stats(int pid, struct stats *st)
 int sys_get_key(char *c) 
 {
 	if (!access_ok(VERIFY_READ, c, 1)) return -EFAULT;
-	return read_buffer(c);
+	return read_buffer(c); //aquí fem el copy_to_user.
 }
 
 int sys_put_screen(char *s)
