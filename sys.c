@@ -265,10 +265,9 @@ int sys_put_screen(char *s)
 }
 
 int *sys_sbrk(int incr) {
-    //sbrk no pot ser negatiu en la nostre implementació
-    int bytes_que_quedan = 1024*PAGE_SIZE - *current()->last_pos;
-    if (incr < 0) return -1;
-    if (incr > bytes_que_quedan) return -1;
+    int bytes_left = 1024*PAGE_SIZE - *current()->last_pos;
+    if (incr < 0) return -EAGAIN;
+    if (incr > bytes_left) return -ENOMEM;
      //pas 1: Agafar direcció on començar
     int *init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
@@ -278,7 +277,7 @@ int *sys_sbrk(int incr) {
     int init_page = (unsigned) (*init_pos >> 12); 
     for (int i = 0; i < pages; ++i) {
         int ph_page = alloc_frame();
-        set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1, ph_page );
+        set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1, ph_page);
     }
   *(current()->last_pos) += incr; // l'ultima posicio alocatada canvia
   return init_pos;
