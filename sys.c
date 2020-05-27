@@ -247,18 +247,21 @@ int sys_get_stats(int pid, struct stats *st)
 int sys_get_key(char *c) 
 {
 	if (!access_ok(VERIFY_READ, c, 1)) return -EFAULT;
-	return read_buffer(c); //aquí fem el copy_to_user.
+	read_buffer(c); //aquí fem el copy_to_user.
+	return 1;
 }
-
+#define TAM_PANTALLA 2000
 int sys_put_screen(char *s)
 {
 	if (!access_ok(VERIFY_READ, s, 1)) return -EFAULT;
 	int i, j;
-	char result;
+	char result[25][80];
+	copy_from_user(s, result, TAM_PANTALLA);
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
-			result = *(s+i*80+j);
-			printc_xy(j, i, result);
+			//copy_from_user(s+i*80+j,result,1);
+			//result = *(s+i*80+j);
+			printc_xy(j, i, result[i][j]);
 		}
 	}
 	return 1;

@@ -8,9 +8,13 @@ char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
 
-//posicio inicial de la nau
+//posicio inicial de la serp
 int pos_x_nau = 40;
 int pos_y_nau = 20;
+
+//cos de la serp
+int llargada = 0;
+char cos[][2];
 
 //marcador
 char puntuacio[3];
@@ -33,7 +37,7 @@ int __attribute__ ((__section__(".text.main")))
 {	
 	direccio = 1;
 	pintar_pantalla(pos_x_nau,pos_y_nau);
-	put_screen(p_pantalla);
+	put_screen(pantalla);
 	puntuacio[0] = '0';
 	a = 0;
 	while(1) {
@@ -51,9 +55,10 @@ int __attribute__ ((__section__(".text.main")))
 					++puntuacio_r;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
+					++llargada;
 				}
 				pintar_pantalla(--pos_x_nau, pos_y_nau);
-				put_screen(p_pantalla);
+				put_screen(pantalla);
 			}		
 		}
 		else if(a %100 == 0 && direccio == 2){ //w
@@ -62,9 +67,10 @@ int __attribute__ ((__section__(".text.main")))
 					++puntuacio_r;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
+					++llargada;
 				}
 				pintar_pantalla(pos_x_nau, --pos_y_nau);
-				put_screen(p_pantalla);
+				put_screen(pantalla);
 			}
 		}
 		else if(a %100 == 0 && direccio == 3){ //d
@@ -73,9 +79,10 @@ int __attribute__ ((__section__(".text.main")))
 					++puntuacio_r;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
+					++llargada;
 				}
 				pintar_pantalla(++pos_x_nau, pos_y_nau);
-				put_screen(p_pantalla);
+				put_screen(pantalla);
 			}			
 		}
 		else if(a %100 == 0 && direccio == 4){ //s
@@ -84,23 +91,54 @@ int __attribute__ ((__section__(".text.main")))
 					++puntuacio_r;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
+					++llargada;
 				}
 				pintar_pantalla(pos_x_nau, ++pos_y_nau);
-				put_screen(p_pantalla);
+				put_screen(pantalla);
 			}
 		}
 	}
 }
+ 
+void calcula_cos(int x, int y)
+{
+int i;
+for(i = 0; i < llargada-1; ++i){ //llargada -1 pq nomes volem que entri quan hi ha 2 o mes elements
+	cos[i][0] = cos[i+1][0]; //x
+	cos[i][1] = cos[i+1][1]; //y
+	}
+	cos[llargada][0] = x;
+	cos[llargada][1] = y;
+	coloca_cos();
+}
+
+void coloca_cos()
+{
+	int i;
+	for ( i = 0; i < llargada; ++i) pantalla[cos[i][1]][cos[i][0]] = 'O';
+}
+
 
 void pintar_pantalla(int x, int y){
 	int i, j;
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
-			if((i % 13 == 4 || i % 13 == 5 || i % 13 == 6 || i % 13 == 7) && ( j % 15 == 5 || j % 15 == 6 || j % 15 == 7))pantalla[i][j] = 'X'; //parets fetes amb moduls
-			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76]; //marcador de puntuacio
-			else if(i == y && j == x) pantalla[i][j] = 'O'; //posicio de la nau
-			else pantalla[i][j] = ' '; //pantalla normal per defecte
 			
+			// parets fetes amb moduls 
+			if((i % 13 == 4 || i % 13 == 5 || i % 13 == 6 || i % 13 == 7) && ( j % 15 == 5 || j % 15 == 6 || j % 15 == 7))pantalla[i][j] = 'X';
+			
+			//marcador
+			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76];
+			
+			//cap de la serp
+			else if(i == y && j == x) {
+				pantalla[i][j] = 'O'; //posicio del cap de la serp
+			}
+			
+			//pantalla normal per defecte
+			else pantalla[i][j] = ' ';
+			
+			//ubicació fruita
 			if (!fruita_menjada){ pantalla[y_fruita][x_fruita] = '*'; //fer aixo
 			}else {
 				x_fruita = a % 79;
@@ -110,9 +148,15 @@ void pintar_pantalla(int x, int y){
 			}
 		}
 	}
+	//if (llargada >= 1)calcula_cos(x, y);
 }
-
 */
+/*APUNTS COS
+ *si la serp es menja una fruita la posicio nova apareixera darrere l'ultima posició en la direcció d'aquesta.
+ * has de fer una cua de size llargada que es vagi guardant les posicions / direccions noves que has fet amb la serp i anant afegint a la primera posició i desplaçant les altres, truncant a la posicio
+ * llargada
+ * 
+ */
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS sbrk(int incr) + exit() -----------------------------
@@ -185,9 +229,9 @@ void omplir_pantalla(int x, int y){
 
 
  //------------- JUEGO DE PRUEBAS put_screen(char *s) ------------
-/* 
-char pantalla[80][25];
-char *p_pantalla = &pantalla[0][0];
+/*
+char pantalla[25][80];
+//char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
 
@@ -197,16 +241,15 @@ int __attribute__ ((__section__(".text.main")))
 
 
 int i, j;
-	for(i = 0; i < 80; i++){
-		for (j = 0; j < 25; j++){
+	for(i = 0; i < 25; i++){
+		for (j = 0; j < 80; j++){
 			pantalla[i][j] = 'X';
 		}
 	}
-	
 	while(1) {
 		if(get_key(c_pointer)){
 			if (*c_pointer == 'c') {
-				put_screen(p_pantalla);
+				put_screen(pantalla);
 			}
 		}
 	}

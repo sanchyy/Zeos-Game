@@ -1,8 +1,7 @@
 #include <buffer.h>
 
-char c_buff[BS];
-int r_p = 0; // read pointer
-int w_p = 0; // write pointer
+r_p = 0;
+w_p = 0;
 
 int read_buffer(char *c) {
     if (r_p == w_p)  // No queden variables per llegir
