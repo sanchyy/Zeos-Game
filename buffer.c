@@ -1,4 +1,5 @@
 #include <buffer.h>
+#include <errno.h>
 
 r_p = 0;
 w_p = 0;
