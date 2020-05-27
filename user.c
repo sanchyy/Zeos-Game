@@ -1,7 +1,7 @@
 #include <libc.h>
 
 //-------------------------- JUEGO DE PRUEBAS FRUTA ------------------
-/*
+
 //pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
@@ -150,7 +150,7 @@ void pintar_pantalla(int x, int y){
 	}
 	//if (llargada >= 1)calcula_cos(x, y);
 }
-*/
+
 /*APUNTS COS
  *si la serp es menja una fruita la posicio nova apareixera darrere l'ultima posició en la direcció d'aquesta.
  * has de fer una cua de size llargada que es vagi guardant les posicions / direccions noves que has fet amb la serp i anant afegint a la primera posició i desplaçant les altres, truncant a la posicio
@@ -260,7 +260,7 @@ int i, j;
 
 
  //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
-
+/*
 
 char c;
 char *c_pointer = &c;
@@ -275,5 +275,5 @@ int __attribute__ ((__section__(".text.main")))
 	}
 	   }
 }
-
+*/
 //--------------------------------------------------------------

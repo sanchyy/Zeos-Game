@@ -259,8 +259,6 @@ int sys_put_screen(char *s)
 	copy_from_user(s, result, TAM_PANTALLA);
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
-			//copy_from_user(s+i*80+j,result,1);
-			//result = *(s+i*80+j);
 			printc_xy(j, i, result[i][j]);
 		}
 	}
