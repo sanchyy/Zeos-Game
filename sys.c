@@ -279,6 +279,6 @@ int *sys_sbrk(int incr) {
         int ph_page = alloc_frame();
         set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1, ph_page);
     }
-  *(current()->last_pos) += incr; // l'ultima posicio alocatada canvia
+  current()->last_pos += incr; // l'ultima posicio alocatada canvia
   return init_pos;
 }
