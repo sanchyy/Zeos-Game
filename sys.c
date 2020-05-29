@@ -266,22 +266,24 @@ int sys_put_screen(char *s)
 }
 
 int sys_sbrk(int incr) {
+	
     int bytes_left = LAST_POS_MEM - current()->last_pos;
     if (incr < 0) return -EAGAIN;
     if (incr > bytes_left) return -ENOMEM;
-     //pas 1: Agafar direcció on començar
+    
     int init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
-    //pas 2: incrementar memòria i actualitzar punter
     int new_pos = (unsigned) init_pos + (unsigned) incr;
-    int pages = current()->last_pos >> 12 - (new_pos >> 12);
+    int pages = (new_pos >> 12)-(current()->last_pos-1 >> 12);
     int init_page = (unsigned) (init_pos >> 12); 
+    
     for (int i = 1; i <= pages; ++i) {
         int ph_page = alloc_frame();
         set_ss_pag(process_PT, init_page+i, ph_page);
     }
-  current()->last_pos += incr; // l'ultima posicio alocatada canvia
-  return init_pos;
+    
+	current()->last_pos += incr; // l'ultima posicio alocatada canvia
+	return init_pos;
 }
 
 

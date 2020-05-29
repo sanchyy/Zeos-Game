@@ -167,10 +167,22 @@ char buffer[10];
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-	retorn = sbrk(10);
-	itoa(retorn, buffer); //ha de retornar 0x11C
+	retorn = sbrk(4096);
+	itoa(retorn, buffer);
 	write(1, buffer, 10);
+	retorn = sbrk(17000);
+	itoa(retorn, buffer);
+	write(1,"\n", 1);
+	write(1,buffer, 10);
 	retorn = sbrk(2000);
+	itoa(retorn, buffer);
+	write(1,"\n", 1);
+	write(1,buffer, 10);
+		retorn = sbrk(2000);
+	itoa(retorn, buffer);
+	write(1,"\n", 1);
+	write(1,buffer, 10);
+		retorn = sbrk(2000);
 	itoa(retorn, buffer);
 	write(1,"\n", 1);
 	write(1,buffer, 10);
