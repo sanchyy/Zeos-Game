@@ -195,7 +195,9 @@ void init_task1(void)
 
   c->state=ST_RUN;
 
-  c->last_pos = FIRST_ASSIGNABLE_POS << 12;;
+  c->last_pos = FIRST_ASSIGNABLE_POS;
+  
+  c->priority = 1;
 
   remaining_quantum=c->total_quantum;
 

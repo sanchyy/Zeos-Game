@@ -1,7 +1,7 @@
 #include <libc.h>
 
-//-------------------------- JUEGO DE PRUEBAS FRUTA ------------------
-
+//-------------------------- EL JUEGO: SNAKE ------------------
+/*
 //pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
@@ -150,7 +150,7 @@ void pintar_pantalla(int x, int y){
 	}
 	//if (llargada >= 1)calcula_cos(x, y);
 }
-
+*/
 /*APUNTS COS
  *si la serp es menja una fruita la posicio nova apareixera darrere l'ultima posició en la direcció d'aquesta.
  * has de fer una cua de size llargada que es vagi guardant les posicions / direccions noves que has fet amb la serp i anant afegint a la primera posició i desplaçant les altres, truncant a la posicio
@@ -160,22 +160,23 @@ void pintar_pantalla(int x, int y){
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS sbrk(int incr) + exit() -----------------------------
-/*
-int *retorn;
-char buffer[5];
+
+int retorn;
+char buffer[10];
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-	retorn = sbrk(25);
-	itoa(*retorn, buffer); //ha de retornar 0x11C
-	write(1, buffer, 5);
+	retorn = sbrk(10);
+	itoa(retorn, buffer); //ha de retornar 0x11C
+	write(1, buffer, 10);
 	retorn = sbrk(2000);
-	itoa(*retorn, buffer);
-	write(1, buffer, 5);
+	itoa(retorn, buffer);
+	write(1,"\n", 1);
+	write(1,buffer, 10);
 	while(1) {}
 }
-*/
+
 // -----------------------------------------------------------------------------------------
 
 

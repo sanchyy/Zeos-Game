@@ -131,12 +131,26 @@ ENTRY(put_screen)
     ret
 
 
-/* void sbrk(double increment) */
+/* void sbrk(int increment) */
 ENTRY(sbrk)
     pushl %ebp
     movl %esp, %ebp
     pushl %ebx;
     movl $0x07, %eax # codi 7
+    movl 0x8(%ebp), %ebx;
+    call syscall_sysenter
+	popl %ebx
+	test %eax, %eax
+	js nok
+    popl %ebp
+    ret
+
+/* void change_priority(int value) */
+ENTRY(change_priority)
+    pushl %ebp
+    movl %esp, %ebp
+    pushl %ebx;
+    movl $0x07, %eax # codi 3
     movl 0x8(%ebp), %ebx;
     call syscall_sysenter
 	popl %ebx

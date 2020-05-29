@@ -33,8 +33,9 @@ int get_key(char *c);
 
 int put_screen(char *s);
 
-int *sbrk(int incr);
+int sbrk(int incr);
 
+int sys_change_priority(int value);
 
 
 #endif  /* __LIBC_H__ */

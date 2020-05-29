@@ -201,7 +201,7 @@ void sys_exit()
     free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+i));
     del_ss_pag(process_PT, PAG_LOG_INIT_DATA+i);
   }
-  pags_extra = (*(current()->last_pos) >> 12) - FIRST_ASSIGNABLE_POS;
+  pags_extra = ((current()->last_pos) >> 12) - FIRST_ASSIGNABLE_POS;
   for(j = 0; j < pags_extra; ++i){
 	free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i));
 	del_ss_pag(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i);
@@ -265,21 +265,27 @@ int sys_put_screen(char *s)
 	return 1;
 }
 
-int *sys_sbrk(int incr) {
-    int bytes_left = 1024*PAGE_SIZE - *current()->last_pos;
+int sys_sbrk(int incr) {
+    int bytes_left = LAST_POS_MEM - current()->last_pos;
     if (incr < 0) return -EAGAIN;
     if (incr > bytes_left) return -ENOMEM;
      //pas 1: Agafar direcció on començar
-    int *init_pos = current()->last_pos;
+    int init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
     //pas 2: incrementar memòria i actualitzar punter
-    int *new_pos = (unsigned) init_pos + (unsigned) incr;
-    int pages = *(current()->last_pos) >> 12 - (*new_pos >> 12);
-    int init_page = (unsigned) (*init_pos >> 12); 
-    for (int i = 0; i < pages; ++i) {
+    int new_pos = (unsigned) init_pos + (unsigned) incr;
+    int pages = current()->last_pos >> 12 - (new_pos >> 12);
+    int init_page = (unsigned) (init_pos >> 12); 
+    for (int i = 1; i <= pages; ++i) {
         int ph_page = alloc_frame();
-        set_ss_pag(process_PT, FIRST_ASSIGNABLE_POS + init_page + i + 1, ph_page);
+        set_ss_pag(process_PT, init_page+i, ph_page);
     }
   current()->last_pos += incr; // l'ultima posicio alocatada canvia
   return init_pos;
+}
+
+
+int sys_change_priority(int value)
+{
+	current()->priority = value;
 }
