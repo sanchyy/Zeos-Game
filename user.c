@@ -163,15 +163,17 @@ void pintar_pantalla(int x, int y){
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS ------------------------------
+//Si se comenta sbrk da page fault porque se pasa de las 20 páginas de datos que tiene el proceso.
+//En cambio con sbrk, reservando más espacio, funciona
 /*
 int retorn;
-char vector[40][25][80];
+char vector[41][25][80];
 char result;
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
 	retorn = sbrk(4096);
-	for(int i = 0; i < 40; ++i){
+	for(int i = 0; i < 41; ++i){
 		for(int j = 0;j < 25; ++j){
 			for(int k = 0; k < 80; ++k) vector[i][j][k] = 'X';
 			}
@@ -186,54 +188,54 @@ int __attribute__ ((__section__(".text.main")))
 
 
 //---------------- JUEGO DE PRUEBAS sbrk(int incr) -----------------------------
-
+/*
 int retorn;
 char buffer[7];
 
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-	/* sbrk con valor de parámetro negativo - error 11*/
+	// sbrk con valor de parámetro negativo - error 11
 	retorn = sbrk(-3);
 	perror();
 	
 	write(1,"\n", 1);
 	
-	/* sbrk con valor de parámetro demasiado grande - error 12*/
+	// sbrk con valor de parámetro demasiado grande - error 12
 	retorn = sbrk(20000000000000000000);
 	perror();
 
 	write(1,"\n", 1);
 	
-	/* sbrk con valor de 0 -> el siguiente sbrk tiene que devolver la misma dirección de memoria*/
+	// sbrk con valor de 0 -> el siguiente sbrk tiene que devolver la misma dirección de memoria
 	retorn = sbrk(0);
 	itoa(retorn, buffer);
 	write(1, buffer, 7);
 	
 	write(1,"\n", 1);
 	
-	/* sbrk con valor de menos de una página -> el siguiente sbrk tiene que devolver otro valor*/
+	// sbrk con valor de menos de una página -> el siguiente sbrk tiene que devolver otro valor
 	retorn = sbrk(2048);
 	itoa(retorn, buffer);
 	write(1, buffer, 7);
 	
 	write(1,"\n", 1);
 	
-	/* sbrk con valor de mas de una página -> el siguiente sbrk tiene que devolver otro valor*/
+	// sbrk con valor de mas de una página -> el siguiente sbrk tiene que devolver otro valor
 	retorn = sbrk(7000);
 	itoa(retorn, buffer);
 	write(1, buffer, 7);
 	
 	write(1,"\n", 1);
 	
-	/* sbrk para comprovar el valor anterior. Si se cambia el valor de retorno de sbrk 
-	 * para que devuelva las páginas se verán las que se reservan*/
+	// sbrk para comprovar el valor anterior. (Si se cambia el valor de retorno de sbrk  en todas las llamadas anteriores
+	// para que devuelva las páginas se verán las que se reservan)
 	retorn = sbrk(512);
 	itoa(retorn, buffer);
 	write(1, buffer, 7);
 	while(1) {}
 }
-
+*/
 // -----------------------------------------------------------------------------------------
 
 
