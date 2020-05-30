@@ -1,8 +1,6 @@
 #include <libc.h>
 #include <types.h>
 
-
-
 //-------------------------- EL JUEGO: SNAKE ------------------
 /*
 //pantalla i key premuda
@@ -154,12 +152,6 @@ void pintar_pantalla(int x, int y){
 	//if (llargada >= 1)calcula_cos(x, y);
 }
 */
-/*APUNTS COS
- *si la serp es menja una fruita la posicio nova apareixera darrere l'ultima posició en la direcció d'aquesta.
- * has de fer una cua de size llargada que es vagi guardant les posicions / direccions noves que has fet amb la serp i anant afegint a la primera posició i desplaçant les altres, truncant a la posicio
- * llargada
- * 
- */
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS ------------------------------
@@ -178,10 +170,7 @@ int __attribute__ ((__section__(".text.main")))
 			for(int k = 0; k < 80; ++k) vector[i][j][k] = 'X';
 			}
 		}
-		result = vector[17][3][2];
-		write(1, result, 1);
 	while(1){};
-	
 }
 */
 //--------------------------------------------------------------------------------------
@@ -320,20 +309,22 @@ int i, j;
 
 
  //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
-/*
+
 
 char c;
 char *c_pointer = &c;
-
+char *c_pointer2 = 0x300000;
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
-
-  while(1) {
-	  if(get_key(c_pointer)){
-		if (*c_pointer == 'c') write(1, "OK!", 3);
+	while(1) { 
+		  //captura una tecla y printa algo por pantalla 
+	/*	if(get_key(c_pointer)){
+			if (*c_pointer == 'c') write(1, "OK!", 3);
+		}*/
+		//caso en que se le pasa un puntero que apunta a una posición no valida
+		if(get_key(c_pointer2)) perror(); //devuelve error gracias al access_ok()
 	}
-	   }
 }
-*/
+
 //--------------------------------------------------------------

@@ -201,10 +201,10 @@ void sys_exit()
     free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+i));
     del_ss_pag(process_PT, PAG_LOG_INIT_DATA+i);
   }
-  pags_extra = ((current()->last_pos) >> 12) - FIRST_ASSIGNABLE_POS;
+  pags_extra = ((current()->last_pos) >> 12) - (FIRST_ASSIGNABLE_POS >> 12);
   for(j = 0; j < pags_extra; ++i){
-	free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i));
-	del_ss_pag(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+i);
+	free_frame(get_frame(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+NUM_PAG_CODE+i));
+	del_ss_pag(process_PT, PAG_LOG_INIT_DATA+NUM_PAG_DATA+NUM_PAG_CODE+i);
 	}
   
   /* Free task_struct */
