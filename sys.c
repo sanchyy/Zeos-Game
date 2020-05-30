@@ -274,14 +274,21 @@ int sys_sbrk(int incr) {
     int init_pos = current()->last_pos;
     page_table_entry *process_PT = get_PT(current());
     int new_pos = (unsigned) init_pos + (unsigned) incr;
-    int pages = (new_pos >> 12)-(current()->last_pos-1 >> 12);
+    int pages = (new_pos >> 12)-(current()->last_pos >> 12);
+    if(current()->last_pos == L_USER_START+(NUM_PAG_CODE+NUM_PAG_DATA)*0x1000)++pages;
     int init_page = (unsigned) (init_pos >> 12); 
     
-    for (int i = 1; i <= pages; ++i) {
+    for (int i = 0; i < pages; i++) {
         int ph_page = alloc_frame();
-        set_ss_pag(process_PT, init_page+i, ph_page);
+        if(ph_page != -1) set_ss_pag(process_PT, init_page+i, ph_page);
+        else{ //si no queden frames dealocata tot
+			for(int j = 0; j < i; j++){
+				free_frame(get_frame(process_PT, init_page+j));
+				del_ss_pag(process_PT, init_page+j);
+			}
+		return -EAGAIN; 
+		}
     }
-    
 	current()->last_pos += incr; // l'ultima posicio alocatada canvia
 	return init_pos;
 }
