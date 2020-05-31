@@ -4,7 +4,7 @@
 //-------------------------- EL JUEGO: SNAKE  + juego muchos tics------------------
 //Sirve para ámbos juegos de pruebas. En este caso limitamos con un módulo cada cuantos ticks de reloj queremos haya entre 2 frames.
 
-
+/*
 
 //pantalla i key premuda
 char pantalla[25][80];
@@ -150,10 +150,28 @@ void pintar_pantalla(int x, int y){
 
 	actualitza_cos();
 }
-
+*/
 //-----------------------------------------------------------------------------------------
 
+//----------------- JUEGO DE PRUEBAS POCOS TICKS --------------------------------------
+int __attribute__ ((__section__(".text.main")))
+  main(void)
+{
+	int a = fork();
+	if(a = 0){
+//todos los hijos tienen prioridad 1, así que se la tenemos que cambiar.
+	change_priority(0); //Al tener ahora prioridad 0 se provoca starvation del proceso hijo.
+	while(1){};
+	}
+	else{
+		while(1){};	
 
+		//ahora el padre tiene todos los recursos
+	}
+	
+	
+}
+//-------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS - NIVEL 2 ------------------------------
 //Si se comenta sbrk da page fault porque se pasa de las 20 páginas de datos que tiene el proceso.

@@ -215,7 +215,7 @@ void init_task1(void)
 
   c->last_pos = FIRST_ASSIGNABLE_POS;
   
-  c->priority = 0;
+  c->priority = 1;
 
   remaining_quantum=c->total_quantum;
 
