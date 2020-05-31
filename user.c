@@ -2,7 +2,7 @@
 #include <types.h>
 
 //-------------------------- EL JUEGO: SNAKE ------------------
-/*
+
 //pantalla i key premuda
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
@@ -151,7 +151,7 @@ void pintar_pantalla(int x, int y){
 	}
 	//if (llargada >= 1)calcula_cos(x, y);
 }
-*/
+
 //-----------------------------------------------------------------------------------------
 
 //---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS ------------------------------
@@ -310,7 +310,7 @@ int i, j;
 
  //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
 //Para probar las diferentes situaciones que comprueba el juego de pruebas se tienen que comentar/descomentar algunas líneas
-
+/*
 char c;
 char *c_pointer = &c;
 char *c_pointer2 = 0x300000; //posición fuera del rango de memoria, ya que no hemos ampliado el heap
@@ -320,20 +320,18 @@ int __attribute__ ((__section__(".text.main")))
 		
   main(void)
 {
-		int res = get_key(c_pointer);
-		itoa(res, buff);
-		write(1, buff, strlen(buff));
+		
 	while(1) { 
 
-
+		int res = get_key(c_pointer);
+		perror();
 		  //captura una tecla y printa algo por pantalla 
-	/*	if(get_key(c_pointer)){
-			if (*c_pointer == 'c') write(1, "OK!", 3);
-		}*/
+		//if(get_key(c_pointer)){
+		//	if (*c_pointer == 'c') write(1, "OK!", 3);
+		//}
 		//caso en que se le pasa un puntero que apunta a una posición no valida
-		//if(get_key(c_pointer2)) 
-		//if (errno > 0)perror(); //devuelve error gracias al access_ok()
+		//if(get_key(c_pointer2)) if (errno > 0)perror(); //devuelve error gracias al access_ok()
 	}
 }
-
+*/
 //--------------------------------------------------------------

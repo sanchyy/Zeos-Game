@@ -6,16 +6,14 @@ w_p = 0;
 count = 0;
 
 void read_buffer(char *c) {
-	if(count == 0) return -EAGAIN;
-    if (r_p == w_p) return -EAGAIN;  // No queden variables per llegir
-    if (w_p == BS) return -ENOMEM;
-    copy_to_user(&c_buff[r_p++], c, 1);
+	if(count == 0) return -EAGAIN;// No queden variables per llegir, buffer buit
+    copy_to_user(&c_buff[r_p++%BS], c, 1);
     --count;
     return 1;
 }
 
 void write_buffer(char c) {
-    if (w_p == BS) return -ENOMEM;
-    c_buff[w_p++] = c;
+	if(count >= 256) return -ENOMEM
+    c_buff[w_p++%BS] = c;
     ++count;
 }
