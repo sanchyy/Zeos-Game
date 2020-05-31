@@ -6,8 +6,9 @@
 char c_buff[BS];
 int r_p; // read pointer
 int w_p; // write pointer
+int count; //contador de posicions
 
-int read_buffer(char *c);
+void read_buffer(char *c);
 void write_buffer(char c);
 
 #endif  /* BUFFER_H */
