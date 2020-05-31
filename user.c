@@ -313,7 +313,7 @@ int i, j;
 
 char c;
 char *c_pointer = &c;
-char *c_pointer2 = 0x300000;
+char *c_pointer2 = 0x0;
 int __attribute__ ((__section__(".text.main")))
   main(void)
 {
