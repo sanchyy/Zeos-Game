@@ -247,8 +247,9 @@ int sys_get_stats(int pid, struct stats *st)
 int sys_get_key(char *c) 
 {
 	if (!access_ok(VERIFY_READ, c, 1)) return -EFAULT;
-	read_buffer(c); //aquí fem el copy_to_user.
-	return 1;
+	int res = read_buffer(c); //aquí fem el copy_to_user.
+	if(res == 1)return 1;
+	else -EAGAIN; //No queden lletres per llegir
 }
 #define TAM_PANTALLA 2000
 int sys_put_screen(char *s)

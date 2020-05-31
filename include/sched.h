@@ -75,6 +75,7 @@ page_table_entry * get_DIR (struct task_struct *t) ;
 void sched_next_rr();
 void update_process_state_rr(struct task_struct *t, struct list_head *dest);
 int needs_sched_rr();
+int needs_sched_rr_priority();
 void update_sched_data_rr();
 
 void init_stats(struct stats *s);

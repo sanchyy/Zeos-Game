@@ -34,6 +34,8 @@ struct list_head freequeue;
 // Ready queue
 struct list_head readyqueue;
 
+struct list_head readyqueue_priority;
+
 void init_stats(struct stats *s)
 {
 	s->user_ticks = 0;
@@ -102,7 +104,13 @@ void update_sched_data_rr(void)
 
 int needs_sched_rr(void)
 {
-  if ((remaining_quantum==0)&&(!list_empty(&readyqueue))) return 1;
+  if ((remaining_quantum==0) && (!list_empty(&readyqueue))) return 1;
+  if (remaining_quantum==0) remaining_quantum=get_quantum(current());
+  return 0;
+}
+int needs_sched_rr_priority(void){
+
+  if ((remaining_quantum==0)&&(!list_empty(&readyqueue_priority))) return 1;
   if (remaining_quantum==0) remaining_quantum=get_quantum(current());
   return 0;
 }
@@ -112,8 +120,9 @@ void update_process_state_rr(struct task_struct *t, struct list_head *dst_queue)
   if (t->state!=ST_RUN) list_del(&(t->list));
   if (dst_queue!=NULL)
   {
-    list_add_tail(&(t->list), dst_queue);
-    if (dst_queue!=&readyqueue) t->state=ST_BLOCKED;
+	if(t->priority == 1) list_add_tail(&(t->list), &readyqueue_priority);
+	else list_add_tail(&(t->list), &readyqueue_priority);
+    if (dst_queue!=&readyqueue && dst_queue != &readyqueue_priority) t->state=ST_BLOCKED;
     else
     {
       update_stats(&(t->p_stats.system_ticks), &(t->p_stats.elapsed_total_ticks));
@@ -128,10 +137,14 @@ void sched_next_rr(void)
   struct list_head *e;
   struct task_struct *t;
 
-  if (!list_empty(&readyqueue)) {
+  if(!list_empty(&readyqueue_priority)){
+	 e = list_first(&readyqueue_priority);
+    list_del(e);
+    t=list_head_to_task_struct(e);
+  }
+  else if (!list_empty(&readyqueue)) {
 	e = list_first(&readyqueue);
     list_del(e);
-
     t=list_head_to_task_struct(e);
   }
   else
@@ -150,7 +163,12 @@ void sched_next_rr(void)
 void schedule()
 {
   update_sched_data_rr();
-  if (needs_sched_rr())
+  if(needs_sched_rr_priority())
+  {
+	update_process_state_rr(current(), &readyqueue_priority);  
+	 sched_next_rr();
+	}
+  else if (needs_sched_rr())
   {
     update_process_state_rr(current(), &readyqueue);
     sched_next_rr();
@@ -197,7 +215,7 @@ void init_task1(void)
 
   c->last_pos = FIRST_ASSIGNABLE_POS;
   
-  c->priority = 1;
+  c->priority = 0;
 
   remaining_quantum=c->total_quantum;
 
@@ -231,6 +249,7 @@ void init_sched()
 {
   init_freequeue();
   INIT_LIST_HEAD(&readyqueue);
+  INIT_LIST_HEAD(&readyqueue_priority);
 }
 
 struct task_struct* current()

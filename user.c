@@ -100,25 +100,6 @@ int __attribute__ ((__section__(".text.main")))
 		}
 	}
 }
- 
-void calcula_cos(int x, int y)
-{
-int i;
-for(i = 0; i < llargada-1; ++i){ //llargada -1 pq nomes volem que entri quan hi ha 2 o mes elements
-	cos[i][0] = cos[i+1][0]; //x
-	cos[i][1] = cos[i+1][1]; //y
-	}
-	cos[llargada][0] = x;
-	cos[llargada][1] = y;
-	coloca_cos();
-}
-
-void coloca_cos()
-{
-	int i;
-	for ( i = 0; i < llargada; ++i) pantalla[cos[i][1]][cos[i][0]] = 'O';
-}
-
 
 void pintar_pantalla(int x, int y){
 	int i, j;
@@ -149,12 +130,13 @@ void pintar_pantalla(int x, int y){
 			}
 		}
 	}
-	//if (llargada >= 1)calcula_cos(x, y);
 }
 
 //-----------------------------------------------------------------------------------------
 
-//---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS ------------------------------
+
+
+//---------------- JUEGO DE PRUEBAS DIFERENTES ESCENARIOS - NIVEL 2 ------------------------------
 //Si se comenta sbrk da page fault porque se pasa de las 20 páginas de datos que tiene el proceso.
 //En cambio con sbrk, reservando más espacio, funciona
 /*
@@ -229,9 +211,9 @@ int __attribute__ ((__section__(".text.main")))
 
 
 
-//------------- JUEGO DE PRUEBAS NAVE put_screen(char *s) + get_key(char *c) ------------
-
+//------------- JUEGO DE PRUEBAS NAVE put_screen(char *s) + get_key(char *c) - NIVEL 1------------
 /*
+
 char pantalla[25][80];
 char *p_pantalla = &pantalla[0][0];
 char c;
@@ -272,15 +254,16 @@ void omplir_pantalla(int x, int y){
 	
 }
  
- */
+*/
  //--------------------------------------------------------------------
 
 
 
  //------------- JUEGO DE PRUEBAS put_screen(char *s) ------------
-/*
+ /*
+//Para probar las diferentes situaciones que comprueba el juego de pruebas se tienen que comentar/descomentar algunas líneas
 char pantalla[25][80];
-//char *p_pantalla = &pantalla[0][0];
+char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
 
@@ -288,49 +271,52 @@ int __attribute__ ((__section__(".text.main")))
   main(void)
 {
 
-
-int i, j;
+	//creamos la matriz
+	int i, j;
 	for(i = 0; i < 25; i++){
 		for (j = 0; j < 80; j++){
 			pantalla[i][j] = 'X';
 		}
 	}
-	while(1) {
-		if(get_key(c_pointer)){
-			if (*c_pointer == 'c') {
-				put_screen(pantalla);
-			}
-		}
-	}
+	put_screen de una matriz de forma correcta
+	put_screen(p_pantalla);
+	
+	//put_screen con un valor de parámetro no correcto. Comprobamos perror antes y después.
+	//perror();
+	//put_screen(0x300000);
+	//perror();
+	while(1) {}
 }
 */
 //---------------------------------------------------------------
 
 
 
- //------------- JUEGO DE PRUEBAS get_key(char *c) ---------------
+ //------------- JUEGO DE PRUEBAS get_key(char *c) + buffer circular ---------------
 //Para probar las diferentes situaciones que comprueba el juego de pruebas se tienen que comentar/descomentar algunas líneas
 /*
 char c;
 char *c_pointer = &c;
 char *c_pointer2 = 0x300000; //posición fuera del rango de memoria, ya que no hemos ampliado el heap
-char buff[16];
-
-int __attribute__ ((__section__(".text.main")))
-		
+char *r;
+int count = 1;
+int __attribute__ ((__section__(".text.main")))		
   main(void)
 {
 		
 	while(1) { 
-
-		int res = get_key(c_pointer);
-		perror();
-		  //captura una tecla y printa algo por pantalla 
-		//if(get_key(c_pointer)){
-		//	if (*c_pointer == 'c') write(1, "OK!", 3);
-		//}
+		
+		//captura una tecla y printa algo por pantalla - uso normal
+		if(get_key(c_pointer)) {
+			if (*c_pointer == 'c') write(1, c_pointer, strlen(c_pointer));
+			}
+		
+		
 		//caso en que se le pasa un puntero que apunta a una posición no valida
 		//if(get_key(c_pointer2)) if (errno > 0)perror(); //devuelve error gracias al access_ok()
+		
+		//caso en el que no hay ningún valor para leer en el buffer
+		//if(get_key(r)) perror();
 	}
 }
 */

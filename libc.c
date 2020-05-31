@@ -45,25 +45,25 @@ int strlen(char *a)
 
 void perror()
 {
-  char buffer[256];
-  char buf_errno[16];
-  itoa(errno, buf_errno);
-  
-  switch(errno){
-	  
-	  case 11: 
-	  write(1, "EAGAIN: Try again", 17);
-	  
-	  case 12:
-	  write(1, "ENOMEM: Out of Memory",21); 
-	  
-	  case 13:
-	  write(1, "EACCESS: Permission denied", 26); 
-	  
-	  case 14:
-	  write(1, "EFAULT: Bad address", 19); 
-	  
-	  default: write(1, buf_errno, strlen(buf_errno));
-	  
-	}
+char buffer[256];
+itoa(errno, buffer);
+
+	switch(errno){
+		 case 11: 
+		  write(1, "EAGAIN: Try again", 17);
+
+		  case 12:
+		  write(1, "ENOMEM: Out of Memory",21); 
+
+		  case 13:
+		  write(1, "EACCESS: Permission denied", 26); 
+
+		  case 14:
+		  write(1, "EFAULT: Bad address", 19); 
+
+		  case 105: 
+		  write(1, "ENOBUF: No buffer space available", 25);
+		  
+		  default: write(1, buffer, strlen(buffer));
+	}  
 }
