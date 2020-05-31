@@ -9,13 +9,11 @@ char *p_pantalla = &pantalla[0][0];
 char c;
 char *c_pointer = &c;
 
-//posicio inicial de la serp
+//SNAKE
 int pos_x_nau = 40;
 int pos_y_nau = 20;
-
-//cos de la serp
 int llargada = 0;
-char cos[][2];
+int cos[][2];
 
 //marcador
 char puntuacio[3];
@@ -54,9 +52,10 @@ int __attribute__ ((__section__(".text.main")))
 			if(pos_x_nau != 0 && *(p_pantalla+pos_y_nau*80 + pos_x_nau -1) != 'X'){
 				if(*(p_pantalla+pos_y_nau*80 + pos_x_nau -1) == '*') {
 					++puntuacio_r;
+					++llargada;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
-					++llargada;
+					
 				}
 				pintar_pantalla(--pos_x_nau, pos_y_nau);
 				put_screen(pantalla);
@@ -66,9 +65,10 @@ int __attribute__ ((__section__(".text.main")))
 			if(pos_y_nau != 0 && *(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) != 'X'){
 				if(*(p_pantalla+(pos_y_nau-1)*80 + pos_x_nau) == '*') {
 					++puntuacio_r;
+					++llargada;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
-					++llargada;
+					
 				}
 				pintar_pantalla(pos_x_nau, --pos_y_nau);
 				put_screen(pantalla);
@@ -78,9 +78,9 @@ int __attribute__ ((__section__(".text.main")))
 			if(pos_x_nau != 79 && *(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) != 'X'){
 				if(*(p_pantalla+pos_y_nau*80 + pos_x_nau + 1) == '*') {
 					++puntuacio_r;
+					++llargada;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
-					++llargada;
 				}
 				pintar_pantalla(++pos_x_nau, pos_y_nau);
 				put_screen(pantalla);
@@ -90,9 +90,9 @@ int __attribute__ ((__section__(".text.main")))
 			if(pos_y_nau != 24 && *(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) != 'X'){
 				if(*(p_pantalla+(pos_y_nau+1)*80 + pos_x_nau) == '*') {
 					++puntuacio_r;
+					++llargada;
 					itoa(puntuacio_r, puntuacio);
 					fruita_menjada = 1;
-					++llargada;
 				}
 				pintar_pantalla(pos_x_nau, ++pos_y_nau);
 				put_screen(pantalla);
@@ -100,23 +100,18 @@ int __attribute__ ((__section__(".text.main")))
 		}
 	}
 }
- 
-void calcula_cos(int x, int y)
-{
-int i;
-for(i = 0; i < llargada-1; ++i){ //llargada -1 pq nomes volem que entri quan hi ha 2 o mes elements
-	cos[i][0] = cos[i+1][0]; //x
-	cos[i][1] = cos[i+1][1]; //y
-	}
-	cos[llargada][0] = x;
-	cos[llargada][1] = y;
-	coloca_cos();
-}
 
-void coloca_cos()
+void actualitza_cos()
 {
 	int i;
 	for ( i = 0; i < llargada; ++i) pantalla[cos[i][1]][cos[i][0]] = 'O';
+	//Comput nou cos
+	for (i = llargada-1; i >= 0; ++i) {
+		cos[i][0] = cos[i-1][0];
+		cos[i][1] = cos[i-1][1];
+	}
+	cos[0][0] = pos_x_nau;
+	cos[0][1] = pos_y_nau;
 }
 
 
@@ -126,7 +121,7 @@ void pintar_pantalla(int x, int y){
 		for (j = 0; j < 80; j++){
 			
 			// parets fetes amb moduls 
-			if((i % 13 == 4 || i % 13 == 5 || i % 13 == 6 || i % 13 == 7) && ( j % 15 == 5 || j % 15 == 6 || j % 15 == 7))pantalla[i][j] = 'X';
+			if((i % 13 == 4 || i % 13 == 5 || i % 13 == 6 || i % 13 == 7) && ( j % 15 == 5 || j % 15 == 6 || j % 15 == 7)) pantalla[i][j] = 'X';
 			
 			//marcador
 			else if (i == 0 && j >= 76 && j < 79) pantalla[i][j] = puntuacio[j-76];
@@ -149,7 +144,7 @@ void pintar_pantalla(int x, int y){
 			}
 		}
 	}
-	//if (llargada >= 1)calcula_cos(x, y);
+	actualitza_cos();
 }
 
 //-----------------------------------------------------------------------------------------
